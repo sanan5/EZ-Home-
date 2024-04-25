@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Cast Videos: Google Cast Chrome Sender App</title>
+  <link rel="icon" type="image/x-icon" href="imagefiles/favicon.ico" />
+  <link rel="icon" type="image/png" href="imagefiles/favicon-16x16.png" />
+  <link rel="icon" type="image/png" href="imagefiles/favicon-32x32.png" />
+  <link rel="icon" type="image/png" href="imagefiles/favicon-64x64.png" />
+  <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
+  <link rel="stylesheet" type="text/css" href="css/login.css">
+  <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet'
+    type='text/css'>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+  </head>
+
+  <body>
+    <div id="top_header">
+      <div id="logo"></div>
+    </div>
+    <div id="main_video">
+      <div class="imageSub">
+        <!-- Put Your Image Width -->
+        <div class="blackbg" id="playerstatebg">IDLE</div>
+        <div class=label id="playerstate">IDLE</div>
+        <img src="https://i.ytimg.com/vi/_51q2zR35TE/maxresdefault.jpg" id="video_image">
+        <div id="video_image_overlay"></div>
+        <!-- <iframe src="https://www.youtube.com/embed/uOiTcvHBfaI" id="video_element" allowfullscreen>
+        </iframe> -->
+
+        <div id="video_element" ></div>
+      </div>
+  
+      <div id="skip">Skip Ad</div>
+  
+      <div id="media_control" style="display: none;">
+        <div id=""></div>
+        <div id=""></div>
+        <div id="audio_bg"></div>
+        <div id="audio_bg_track"></div>
+        <div id="audio_indicator"></div>
+        <div id="audio_bg_level"></div>
+        <div id="audio_on"></div>
+        <div id="audio_off"></div>
+        <div id="progress_bar_container">
+          <div id="progress_bg"></div>
+          <div id="seekable_window"></div>
+          <div id="progress"></div>
+          <div id="unseekable_overlay"></div>
+          <div id="progress_indicator"></div>
+        </div>
+        <div id="fullscreen_expand"></div>
+        <div id="fullscreen_collapse"></div>
+    
+        <div id="currentTime">00:00:00</div>
+        <div id="duration">00:00:00</div>
+        <img id="live_indicator">
+      </div>
+    </div>
+    <div id="media_info">
+      <div id="media_title"></div>
+      <div id="feature_toggle_container">
+        <input type="radio" id="none" name="feature" value="none" checked>None<br>
+        <input type="radio" id="ads" name="feature" value="ads">Ads<br>
+        <input type="radio" id="live" name="feature" value="live">Live
+      </div>
+      <div id="media_subtitle"></div>
+    </div>
+    <div class="flex flex-col pl-10 mt-5"> 
+     <h2 class="text-xl font-bold">My Videos</h2>
+      <div id="carousel" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+    </div>
+  
+  
+    <div id="footer">
+      <div id="copyright">Copyright 2021 Google LLC. All Rights reserved.</div>
+      <div id="footer_content">Visit the <a id="footer_content_link" href="https://developers.google.com/cast/">Google
+          Cast Developer Site</a></div>
+      <div id="footer_language">Language English</div>
+    </div>
+    <button id="sigin-button" type="button" class="google-sign-in-button absolute top-10 right-10 z-10" onclick="signIn()">
+      Sign in with Google
+    </button>
+    <div class="bg-gray-700 rounded-3xl mt-20 p-5 pb-20 w-96 absolute top-10 right-10">
+      <div class="flex justify-between align-center">
+          <div class="flex flex-col w-3/4">
+              <h2 class="text-xl text-white font-bold pb-2">Selected Playlist</h2>
+              <div class="flex w-full items-center">
+                <div class="flex flex-col justify-around mr-4">
+                  <button  onclick="moveThePlaylistUp()" class="justify-center align-center w-12 h-12 mb-2 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                  <i class="fa-solid fa-arrow-up-long fa-lg cursor-pointer"></i>
+                  </button>
+                  <button onclick="moveThePlaylistDown()" class="justify-center align-center w-12 h-12 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                  <i class="fa-solid fa-arrow-down-long fa-lg cursor-pointer"></i>
+                    </button>
+                </div>
+                <ul id="playlists" class="space-y-2">
+                  <!-- list of playlist -->
+                </ul>
+              </div>
+          </div>
+          <div class="flex flex-col justify-around space-y-2">
+              <button id="audio_increase" class="justify-center align-center w-12 h-12 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                <i class="fas fa-volume-up text-xl"></i>
+              </button>
+              <button id="audio_decrease" class="justify-center align-center w-12 h-12 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                  <i class="fas fa-volume-down text-xl"></i>
+                </button>
+          </div>
+          <div class="flex space-x-2 absolute left-4 bottom-4">
+              <button class="justify-center align-center w-10 h-10 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                <i class="fas fa-thumbs-up text-xl"></i>
+              </button>
+              <button class="justify-center align-center w-10 h-10 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center">
+                <i class="fas fa-thumbs-down text-xl"></i>
+              </button>
+          </div>
+          <div class="absolute right-4 bottom-4">
+            <google-cast-launcher id="castbutton"></google-cast-launcher>
+          </div>
+      </div>
+      <div class="flex justify-center items-center mt-8">
+        <button id="previousVideoButton" class="w-10 h-10 m-3 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white">
+          <i class="fas fa-thin fa-backward"></i>
+        </button>
+          <button  id="rewindButton" class="w-10 h-10 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white">
+            <i class="fas fa-step-backward"></i>
+          </button>
+          <button id="pause" class="w-16 h-16 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center mx-4">
+            <i class="fas fa-pause"></i>
+          </button>
+          <button id="play" class="w-16 h-16 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white flex justify-center items-center mx-4">
+            <i class="fas fa-play"></i>
+          </button>
+          <button id="fastForwardButton" class="w-10 h-10 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white">
+            <i class="fas fa-step-forward"></i>
+          </button>
+          <button id="nextVideoButton" class="w-10 h-10 m-3 rounded-full bg-gray-500 hover:bg-gray-600 focus:ring-2 focus:ring-offset-2 focus:ring-white">
+            <i class="fas fa-thin fa-forward"></i>
+          </button>
+        </div>
+    </div>
+    <div class="max-w-7xl mr-8 fixed top-0">
+      <div id="grid-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <!-- More channels will be here -->
+      </div>
+  </div>
+  
+    <script src="CastVideos.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  </body>
+
+</html>
